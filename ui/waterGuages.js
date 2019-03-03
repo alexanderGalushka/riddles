@@ -2,7 +2,7 @@ function displayGuage(elementID, maxGuageValue, currentGuageMeasure) {
   var config = liquidFillGaugeDefaultSettings();
   config.maxValue = maxGuageValue;
   config.circleThickness = 0.1;
-  config.circleColor = "#7b5080";
+  config.circleColor = "#676468";
   config.textColor = "#A9A9A9";
   config.waveColor = "#3F78AA";
   config.textVertPosition = 0.8;

@@ -7,46 +7,91 @@
     <script src="liquidFillGauge.js" language="JavaScript"></script>
     <script src="waterGuages.js" language="JavaScript"></script>
     <style>
-        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
-        div {
+        .liquidFillGaugeText {
+            font-family: Helvetica;
+            font-weight: bold;
+        }
+
+        .guage-panel {
             background-color: lightgrey;
             width: 1000px;
-            border: 2px solid #7b5080;
+            border: 2px solid #676468;
             padding: 25px;
-            margin: 100px;
+            margin: 50px;
+        }
+        .goal-input {
+            background-color: lightgrey;
+            width: 1000px;
+            border: 2px solid #676468;
+            padding: 25px;
+            margin: 50px;
+        }
+
+        label {
+            font-family: Helvetica;
+            font-weight: bold;
+        }
+
+        .solve {
+            width: 100px;
+            height: 25px;
+            margin: 50px;
+            font-family: Helvetica;
+            font-weight: bold;
+        }
+
+        input {
+            font-family: Helvetica;
+            font-weight: bold;
+            font-size: 20px;
+            width: 100px;
+            height: 35px;
+        }
+
+        button:hover {
+            background-color: #676468;
+        }
+
+        button:focus {
+            background-color: #3F78AA;
         }
     </style>
 </head>
 <body>
 
-<div class="form-group" align="center">
+<div class="goal-input" align="left">
     <label for="z">Goal Z: </label>
-    <input type="text" class="form-control" id="z">
+    <input type="text" class="input-field" value="0" id="z">
 </div>
 
-<div class="row">
-    <label for="x">Jug X: </label>
-    <input type="text" class="form-control" id="x">
+<div class="guage-panel">
+    <label
+        for="x">Jug X:
+        <input type="text" class="input-field" value="0" id="x">
+    </label>
+
     <svg id="guageX" width="25%" height="200"></svg>
 
-    <label for="y">Jug Y: </label>
-    <input type="text" class="form-control" id="y">
-    <svg id="guageY" width="25%" height="200"></svg>
+    <label
+        for="y">Jug Y:
+        <input type="text" class="input-field" value="0" id="y">
+    </label>
 
+    <svg id="guageY" width="25%" height="200"></svg>
 </div>
 
-<button name="solution" onclick="guageX.update(NewValue());">solve</button>
+<button class="solve" onclick="guageX.update(NewValue());">solve</button>
 
 <script language="JavaScript">
 
   var guageX = displayGuage("guageX", 5, 0);
   var guageY = displayGuage("guageY", 3, 2);
 
-  function NewValue(){
-    if(Math.random() > .5){
-      return Math.round(Math.random()*100);
+  function NewValue() {
+    if (Math.random() > .5) {
+      return Math.round(Math.random() * 100);
     } else {
-      return (Math.random()*100).toFixed(1);
+      return (Math.random() * 100).toFixed(1);
     }
   }
 </script>
