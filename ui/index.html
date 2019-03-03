@@ -5,42 +5,42 @@
     <title></title>
     <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
     <script src="liquidFillGauge.js" language="JavaScript"></script>
+    <script src="waterGuages.js" language="JavaScript"></script>
     <style>
         .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+        div {
+            background-color: lightgrey;
+            width: 1000px;
+            border: 2px solid #7b5080;
+            padding: 25px;
+            margin: 100px;
+        }
     </style>
 </head>
 <body>
-<svg id="fillgauge1" width="19%" height="200" onclick="gauge2.update(NewValue());"></svg>
-<svg id="fillgauge2" width="19%" height="200" onclick="gauge4.update(NewValue());"></svg>
+
+<div class="form-group" align="center">
+    <label for="z">Goal Z: </label>
+    <input type="text" class="form-control" id="z">
+</div>
+
+<div class="row">
+    <label for="x">Jug X: </label>
+    <input type="text" class="form-control" id="x">
+    <svg id="guageX" width="25%" height="200"></svg>
+
+    <label for="y">Jug Y: </label>
+    <input type="text" class="form-control" id="y">
+    <svg id="guageY" width="25%" height="200"></svg>
+
+</div>
+
+<button name="solution" onclick="guageX.update(NewValue());">solve</button>
+
 <script language="JavaScript">
 
-  var config1 = liquidFillGaugeDefaultSettings();
-  config1.maxValue = 5;
-  config1.circleThickness = 0.1;
-  config1.circleColor = "#d41f36";
-  config1.textColor = "#291d1c";
-  config1.waveColor = "#3F78AA";
-  config1.textVertPosition = 0.8;
-  config1.waveAnimateTime = 1000;
-  config1.waveAnimate = true;
-  config1.waveCount = 1;
-  config1.waveHeight = 0.05;
-  config1.displayPercent = false;
-  var gauge1= loadLiquidFillGauge("fillgauge1", 1, config1);
-
-  var config2 = liquidFillGaugeDefaultSettings();
-  config2.maxValue = 3;
-  config2.circleThickness = 0.1;
-  config2.circleColor = "#20d978";
-  config2.textColor = "#291d1c";
-  config2.waveColor = "#3F78AA";
-  config2.textVertPosition = 0.8;
-  config2.waveAnimateTime = 1000;
-  config2.waveAnimate = true;
-  config2.waveCount = 1;
-  config2.waveHeight = 0.05;
-  config2.displayPercent = false;
-  var gauge2 = loadLiquidFillGauge("fillgauge2", 1, config2);
+  var guageX = displayGuage("guageX", 5, 0);
+  var guageY = displayGuage("guageY", 3, 2);
 
   function NewValue(){
     if(Math.random() > .5){

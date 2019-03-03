@@ -17,7 +17,7 @@ func InitRoutes() *gin.Engine {
 	})
 
 	api := r.Group(fmt.Sprintf("%s/:%s", uriPrefix, consts.RiddleTypeURIParam))
-	api.GET("/", h.GetWaterJugRiddlesSolution)
+	api.GET("/", h.GetRiddleSolution)
 
 	return r
 }
