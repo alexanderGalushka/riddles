@@ -6,11 +6,38 @@
     <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
     <script src="liquidFillGauge.js" language="JavaScript"></script>
     <script src="waterGuages.js" language="JavaScript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="solveRiddle.js" language="JavaScript"></script>
     <style>
-        .liquidFillGaugeText {
+
+        label {
             font-family: Helvetica;
             font-weight: bold;
+        }
+
+        input {
+            font-family: Helvetica;
+            font-weight: bold;
+            font-size: 20px;
+            width: 100px;
+            height: 35px;
+            background-color: #676468;
+        }
+
+        button:hover {
+            background-color: #676468;
+        }
+
+        button:focus {
+            background-color: #3F78AA;
+        }
+
+        .goal-input {
+            background-color: lightgrey;
+            width: 1000px;
+            border: 2px solid #676468;
+            padding: 25px;
+            margin: 50px;
         }
 
         .guage-panel {
@@ -31,15 +58,7 @@
             font-size: 20px;
         }
 
-        .goal-input {
-            background-color: lightgrey;
-            width: 1000px;
-            border: 2px solid #676468;
-            padding: 25px;
-            margin: 50px;
-        }
-
-        label {
+        .liquidFillGaugeText {
             font-family: Helvetica;
             font-weight: bold;
         }
@@ -54,22 +73,7 @@
             background-color: lightgrey;
         }
 
-        input {
-            font-family: Helvetica;
-            font-weight: bold;
-            font-size: 20px;
-            width: 100px;
-            height: 35px;
-            background-color: #676468;
-        }
 
-        button:hover {
-            background-color: #676468;
-        }
-
-        button:focus {
-            background-color: #3F78AA;
-        }
     </style>
 </head>
 <body>
@@ -97,50 +101,11 @@
     <svg width="30%" height="250" id="guageY"></svg>
 </div>
 
-<button class="solve" onclick="SolveRiddle();">solve</button>
+<button id="solveButton" class="solve" onclick="solveRiddle();">solve</button>
 
 <script language="JavaScript">
 
-
-  function SolveRiddle() {
-
-    // initialize guages with values from input X and Y
-    let volumeXStr = document.getElementById("x").value;
-    let volumeYStr = document.getElementById("y").value;
-    let volumeZStr = document.getElementById("z").value;
-    let volumeX = parseInt(volumeXStr).valueOf();
-    let volumeY = parseInt(volumeYStr).valueOf();
-    let volumeZ = parseInt(volumeZStr).valueOf();
-
-    scaleGuagesBasedOnVolume(volumeX, volumeY);
-
-    document.getElementById("guage-panel-status").innerHTML =
-      "Measure " + volumeZStr + " gallons of water with " + volumeXStr + " gallon jug and " + volumeYStr + " gallon jug";
-
-    let guageX = displayGuage("guageX", volumeX, 0);
-
-    let guageY = displayGuage("guageY", volumeY, 0);
-
-    //guageX.update(5)
-
-    let solutionSteps = solveWaterJugRiddle(volumeX, volumeY, volumeZ);
-
-    for (let i=0; i < solutionSteps.length; i++) {
-      setTimeout(function(){
-        let state = solutionSteps[i].state;
-        console.log(state);
-        document.getElementById("guage-panel-status").innerHTML = state;
-        let x = solutionSteps[i].x;
-        console.log(x);
-        let y = solutionSteps[i].y;
-        console.log(y);
-        guageX.update(x);
-        guageY.update(y);
-      }, i*2500);
-
-
-      }
-  }
+  //solveRiddle();
 
 </script>
 </body>
