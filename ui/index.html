@@ -21,6 +21,16 @@
             margin: 50px;
         }
 
+        #guage-panel-status {
+            background-color: lightgrey;
+            color: black;
+            padding: 25px;
+            text-align: center;
+            font-family: Helvetica;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
         .goal-input {
             background-color: lightgrey;
             width: 1000px;
@@ -66,20 +76,22 @@
 
 <div class="goal-input" align="left">
     <label for="z">Goal Z: </label>
-    <input type="text" class="input-field" value="0" id="z">
+    <input type="text" class="input-field" id="z">
 </div>
 
 <div class="guage-panel">
+    <h1 id="guage-panel-status"></h1>
+
     <label>
         Jug X:
-        <input type="text" class="input-field" value="0" id="x">
+        <input type="text" class="input-field" id="x">
     </label>
 
     <svg width="30%" height="250" id="guageX"></svg>
 
     <label>
         Jug Y:
-        <input type="text" class="input-field" value="0" id="y">
+        <input type="text" class="input-field" id="y">
     </label>
 
     <svg width="30%" height="250" id="guageY"></svg>
@@ -93,16 +105,41 @@
   function SolveRiddle() {
 
     // initialize guages with values from input X and Y
-    var volumeX = parseInt(document.getElementById("x").value);
-    var volumeY = parseInt(document.getElementById("y").value);
+    let volumeXStr = document.getElementById("x").value;
+    let volumeYStr = document.getElementById("y").value;
+    let volumeZStr = document.getElementById("z").value;
+    let volumeX = parseInt(volumeXStr).valueOf();
+    let volumeY = parseInt(volumeYStr).valueOf();
+    let volumeZ = parseInt(volumeZStr).valueOf();
 
     scaleGuagesBasedOnVolume(volumeX, volumeY);
 
-    console.log(volumeX);
+    document.getElementById("guage-panel-status").innerHTML =
+      "Measure " + volumeZStr + " gallons of water with " + volumeXStr + " gallon jug and " + volumeYStr + " gallon jug";
 
-    var guageX = displayGuage("guageX", 5, 1);
-    var guageY = displayGuage("guageY", 3, 1);
+    let guageX = displayGuage("guageX", volumeX, 0);
 
+    let guageY = displayGuage("guageY", volumeY, 0);
+
+    //guageX.update(5)
+
+    let solutionSteps = solveWaterJugRiddle(volumeX, volumeY, volumeZ);
+
+    for (let i=0; i < solutionSteps.length; i++) {
+      setTimeout(function(){
+        let state = solutionSteps[i].state;
+        console.log(state);
+        document.getElementById("guage-panel-status").innerHTML = state;
+        let x = solutionSteps[i].x;
+        console.log(x);
+        let y = solutionSteps[i].y;
+        console.log(y);
+        guageX.update(x);
+        guageY.update(y);
+      }, i*2500);
+
+
+      }
   }
 
 </script>

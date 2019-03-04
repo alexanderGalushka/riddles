@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetHealthStatus returns health status of the riddles service
+// GetHealthStatus returns health state of the riddles service
 func GetHealthStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, "OK")
