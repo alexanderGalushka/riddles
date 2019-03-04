@@ -12,11 +12,6 @@ import (
 // Step is an alias for map[string]interface{}, representing each step of the riddle
 type Step map[string]interface{}
 
-var supportedRiddleType = map[string]bool{
-	"water_jug":    true,
-	"egg_equation": false,
-}
-
 const noSolutionErrorTemplate = "no solution, unable to measure %d with jug X capacity of %d and jug Y capacity of %d"
 
 // GetRiddleSolution returns step by step solution for supported riddle problem
@@ -25,27 +20,59 @@ func GetRiddleSolution(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{consts.ErrorKey: err.Error()})
 	}
-	if riddleTypeFlag, ok := supportedRiddleType[riddleType]; ok {
-		if !riddleTypeFlag {
-			c.JSON(http.StatusNotImplemented,
-				gin.H{consts.ErrorKey: fmt.Sprintf("handler for %s riddle type has not been implemtned yet",
-					riddleType)})
-		} else {
-			result, err := solveRiddle(riddleType)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError,
-					gin.H{consts.ErrorKey: err.Error()})
-			}
-			c.JSON(http.StatusOK, result)
-		}
-	} else {
-		c.JSON(http.StatusUnprocessableEntity,
-			gin.H{consts.ErrorKey: fmt.Sprintf("%s is unknown riddle type", riddleType)})
+
+	result, err := solveRiddle(riddleType, c)
+	if err != nil {
+		// TODO
 	}
+
+	c.JSON(http.StatusOK, result)
+
+
+	//if riddleTypeFlag, ok := supportedRiddleType[riddleType]; ok {
+	//	if !riddleTypeFlag {
+	//		c.JSON(http.StatusNotImplemented,
+	//			gin.H{consts.ErrorKey: fmt.Sprintf("handler for %s riddle type has not been implemented yet",
+	//				riddleType)})
+	//	} else {
+	//		result, err := solveRiddle(riddleType, c)
+	//		if err != nil {
+	//			c.JSON(http.StatusInternalServerError,
+	//				gin.H{consts.ErrorKey: err.Error()})
+	//		}
+	//		c.JSON(http.StatusOK, result)
+	//	}
+	//} else {
+	//	c.JSON(http.StatusUnprocessableEntity,
+	//		gin.H{consts.ErrorKey: fmt.Sprintf("%s is unknown riddle type", riddleType)})
+	//}
+
 
 }
 
-func solveRiddle(riddleType string) (string, error) {
+func solveRiddle(riddleType string, c *gin.Context) (string, error) {
+	switch riddleType {
+	case "water_jug":
+		x, err := u.GetURIIntParam(c, "x")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{consts.ErrorKey: err.Error()})
+		}
+
+		y, err := u.GetURIIntParam(c, "y")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{consts.ErrorKey: err.Error()})
+		}
+
+		z, err := u.GetURIIntParam(c, "z")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{consts.ErrorKey: err.Error()})
+		}
+		return solveWaterJugRiddle(x, y, z)
+	case "egg_equation":
+		return consts.EmptyString, fmt.Errorf("handler for %s riddle type has not been implemtned yet", riddleType)
+	default:
+		return consts.EmptyString, fmt.Errorf("%s is unknown riddle type", riddleType)
+	}
 
 }
 
