@@ -17,9 +17,9 @@ func GetURIParam(c *gin.Context, param string) (string, error) {
 }
 
 
-// GetURIIntParam retrieves URI param from gin context and converts it to int
-func GetURIIntParam(c *gin.Context, param string) (int, error) {
-	p := c.Params.ByName(param)
+// GetQueryIntParam retrieves query param from gin context and converts it to int
+func GetQueryIntParam(c *gin.Context, param string) (int, error) {
+	p := c.Query(param)
 	if p == consts.EmptyString {
 		return 0, errors.New(param + " query parameter can not be empty")
 	}

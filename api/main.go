@@ -6,7 +6,6 @@ import (
 	r "github.com/alexanderGalushka/riddles/api/routers"
 	"log"
 	"net/http"
-	"time"
 )
 
 func main() {
@@ -15,14 +14,13 @@ func main() {
 	s := &http.Server{
 		Addr:         consts.Port,
 		Handler:      router,
-		ReadTimeout:  500 * time.Millisecond,
-		WriteTimeout: 500 * time.Millisecond,
 	}
+
 	startupMsg := fmt.Sprintf("%s service is listening on port %s", consts.ServiceName, consts.Port)
 	err := s.ListenAndServe()
 	if err != nil {
-		log.Print(startupMsg)
+		log.Fatal(fmt.Sprintf("failed to start %s web server, error: %s", consts.ServiceName, err.Error()))
 	} else {
-		log.Fatal(fmt.Sprintf("failed to start %s web server", consts.ServiceName))
+		log.Print(startupMsg)
 	}
 }

@@ -1,7 +1,7 @@
 package constants
 
 // Port is web server port constant
-const Port = "3000"
+const Port = ":3000"
 
 // HealthcheckURI is the healthcheck URI constant
 const HealthcheckURI = "/healthcheck"
