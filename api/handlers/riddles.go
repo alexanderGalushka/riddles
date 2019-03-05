@@ -11,7 +11,7 @@ import (
 // Step is an alias for map[string]interface{}, representing each step of the riddle
 type Step map[string]interface{}
 
-const noSolutionErrorTemplate = "no solution, unable to measure %d with jug X capacity of %d and jug Y capacity of %d"
+const noSolutionErrorTemplate = "no solution, unable to measure %d gallons of water with jug X capacity of %d and jug Y capacity of %d"
 
 // GetRiddleSolution returns step by step solution for supported riddle problem
 func GetRiddleSolution(c *gin.Context) {
