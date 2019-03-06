@@ -15,6 +15,9 @@ const noSolutionErrorTemplate = "no solution, unable to measure %d gallons of wa
 
 // GetRiddleSolution returns step by step solution for supported riddle problem
 func GetRiddleSolution(c *gin.Context) {
+	// TODO abstract it out to the middleware
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+
 	riddleType, err := u.GetURIParam(c, consts.RiddleTypeURIParam)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{consts.ErrorKey: err.Error()})

@@ -41,17 +41,27 @@ function solveRiddle() {
 function getWaterJugRiddleSolution(x, y, z) {
 
   let queryParams = "x=" + x + "&y=" + y + "&z=" + z;
-  let uri = "http://localhost:3000/v1/riddles/water_jug?" + queryParams;
-  console.log(uri);
+  let url = "http://localhost:3000/v1/riddles/water_jug/solution?" + queryParams;
+  console.log(url);
 
-  axios.get(uri)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  // axios.get(uri)
+  //   .then(function (response) {
+  //     console.log(response);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
 
+
+  fetch(url,        {   method: 'GET',
+    mode: 'no-cors',
+    headers: new Headers(
+      {"Content-Type": "application/json",
+        "Accept":"application/json"}
+    )
+  })
+    .catch(error => console.log('BAD', error))
+    .then(response => console.log('GOOD', response));
 
   let riddleSteps = [
     {

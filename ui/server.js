@@ -1,28 +1,3 @@
-// let express = require('express');
-// let app = express();
-// let path = require('path');
-//
-// const dir = "/Users/agalushka/go/src/github.com/alexanderGalushka/riddles/ui";
-//
-// app.get('/', function(req, res) {
-//   res.sendFile(path.join(dir + '/index.html'));
-// });
-//
-// app.get('/liquidFillGauge.js', function(req, res) {
-//   res.sendFile(path.join(dir + '/liquidFillGauge.js'));
-// });
-//
-// app.get('/solveRiddle.js', function(req, res) {
-//   res.sendFile(path.join(dir + '/solveRiddle.js'));
-//   res.sendFile(path.join(dir + '/waterGuages.js'));
-// });
-//
-// app.get('/waterGuages.js', function(req, res) {
-//   res.sendFile(path.join(dir + '/waterGuages.js'));
-// });
-//
-// app.listen(8080);
-
 var express = require('express');
 var app = express();
 var path = require('path');
