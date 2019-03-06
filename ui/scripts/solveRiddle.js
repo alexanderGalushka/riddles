@@ -1,15 +1,7 @@
 function solveRiddle() {
-  let volumeXStr = document.getElementById("x").value;
-  let volumeYStr = document.getElementById("y").value;
-  let volumeZStr = document.getElementById("z").value;
-// TODO validate the inputs
-  let volumeX = parseInt(volumeXStr).valueOf();
-  let volumeY = parseInt(volumeYStr).valueOf();
-  let volumeZ = parseInt(volumeZStr).valueOf();
 
-// display the problem statement based on the inputs
-  document.getElementById("gauge-panel-status").innerHTML =
-    "Measure " + volumeZStr + " gallons of water with " + volumeXStr + " gallon jug and " + volumeYStr + " gallon jug";
+  let volumeX, volumeY, volumeZ;
+  [volumeX, volumeY, volumeZ] = getRiddleInputsAndDisplayProblemStatement();
 
 // initialize gauges with values from input X and Y
   scaleGaugesBasedOnVolume(volumeX, volumeY);
@@ -38,6 +30,22 @@ function solveRiddle() {
 
 }
 
+function getRiddleInputsAndDisplayProblemStatement() {
+  let volumeXStr = document.getElementById("x").value;
+  let volumeYStr = document.getElementById("y").value;
+  let volumeZStr = document.getElementById("z").value;
+
+  // display the problem statement based on the inputs
+  document.getElementById("gauge-panel-status").innerHTML =
+    "Measure " + volumeZStr + " gallons of water with " + volumeXStr + " gallon jug and " + volumeYStr + " gallon jug";
+
+  // TODO validate the inputs
+  let volumeX = parseInt(volumeXStr).valueOf();
+  let volumeY = parseInt(volumeYStr).valueOf();
+  let volumeZ = parseInt(volumeZStr).valueOf();
+  return [volumeX, volumeY, volumeZ]
+}
+
 function getWaterJugRiddleSolution(x, y, z) {
 
   let queryParams = "x=" + x + "&y=" + y + "&z=" + z;
@@ -52,16 +60,21 @@ function getWaterJugRiddleSolution(x, y, z) {
   //     console.log(error);
   //   });
 
-
-  fetch(url,        {   method: 'GET',
+  let requestConfig = {
+    method: 'GET',
     mode: 'no-cors',
     headers: new Headers(
-      {"Content-Type": "application/json",
-        "Accept":"application/json"}
+      {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
     )
-  })
-    .catch(error => console.log('BAD', error))
-    .then(response => console.log('GOOD', response));
+  };
+
+  fetch(url, requestConfig)
+    .catch(error => console.log('failed to fetch solution from riddle API', error))
+    .then(response => console.log(response.json()));
+
 
   let riddleSteps = [
     {
@@ -98,6 +111,8 @@ function getWaterJugRiddleSolution(x, y, z) {
 
   return riddleSteps;
 }
+
+
 
 function enableControls(controlsFlag) {
   let solveButton = document.getElementById("solveButton");

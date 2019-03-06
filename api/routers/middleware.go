@@ -19,7 +19,6 @@ func CORSMiddleware() gin.HandlerFunc {
 			c.JSON(http.StatusOK, struct{}{})
 			return
 		}
-
 		c.Next()
 	}
 }
