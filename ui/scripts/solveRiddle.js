@@ -26,15 +26,18 @@ function solveWaterJugRiddle() {
     return response.json();
   }).then(solutionSteps => {
     console.log(solutionSteps);
+    let steps = solutionSteps.steps;
 
-    for (let i = 0; i < solutionSteps.length; i++) {
+    console.log("WTF");
+    for (let i = 0; i < steps.length; i++) {
+      console.log("I'm about to start");
       setTimeout(function () {
-        let state = solutionSteps[i].state;
+        let state = steps[i].state;
         console.log(state);
         document.getElementById("gauge-panel-status").innerHTML = state;
-        let x = solutionSteps[i].x;
+        let x = steps[i].x;
         console.log(x);
-        let y = solutionSteps[i].y;
+        let y = steps[i].y;
         console.log(y);
         gaugeX.update(x);
         gaugeY.update(y);
