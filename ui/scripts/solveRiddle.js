@@ -14,9 +14,10 @@ function solveWaterJugRiddle() {
   [volumeX, volumeY, volumeZ] = getRiddleInputsAndDisplayProblemStatement();
 
   // initialize gauges with values from input X and Y
-  scaleGaugesBasedOnVolume(volumeX, volumeY);
-  let gaugeX = displayGauge("gaugeX", volumeX, 0);
-  let gaugeY = displayGauge("gaugeY", volumeY, 0);
+  //let gaugeX, gaugeY;
+  //[gaugeX, gaugeY] = initializeGauges(volumeX, volumeY);
+
+  const gaugePanel = new GaugePanel(volumeX, volumeY);
 
   let queryParams = "x=" + volumeX + "&y=" + volumeY + "&z=" + volumeZ;
   let url = "http://localhost:3000/v1/riddles/water_jug/solution?" + queryParams;
@@ -27,22 +28,26 @@ function solveWaterJugRiddle() {
   }).then(solutionSteps => {
     console.log(solutionSteps);
     let steps = solutionSteps.steps;
+    // for (let i = 0; i < steps.length; i++) {
+    //   setTimeout(function () {
+    //     let state = steps[i].state;
+    //     console.log(state);
+    //     document.getElementById("gauge-panel-status").innerHTML = state;
+    //     let x = steps[i].x;
+    //     console.log(x);
+    //     let y = steps[i].y;
+    //     console.log(y);
+    //     gaugeX.update(x);
+    //     gaugeY.update(y);
+    //   }, (i + 1) * 2500);
+    // }
 
-    console.log("WTF");
+
     for (let i = 0; i < steps.length; i++) {
-      console.log("I'm about to start");
-      setTimeout(function () {
-        let state = steps[i].state;
-        console.log(state);
-        document.getElementById("gauge-panel-status").innerHTML = state;
-        let x = steps[i].x;
-        console.log(x);
-        let y = steps[i].y;
-        console.log(y);
-        gaugeX.update(x);
-        gaugeY.update(y);
-      }, (i + 1) * 2500);
+      let timeout = (i + 1) * 2500;
+      gaugePanel.updateGaugesPanel(steps[i].x, steps[i].y, steps[i].state, timeout);
     }
+
 
   }).catch(err => {
     console.log('failed to fetch solution from riddle API', err)
