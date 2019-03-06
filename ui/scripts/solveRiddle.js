@@ -13,10 +13,6 @@ function solveWaterJugRiddle() {
   let volumeX, volumeY, volumeZ;
   [volumeX, volumeY, volumeZ] = getRiddleInputsAndDisplayProblemStatement();
 
-  // initialize gauges with values from input X and Y
-  //let gaugeX, gaugeY;
-  //[gaugeX, gaugeY] = initializeGauges(volumeX, volumeY);
-
   const gaugePanel = new GaugePanel(volumeX, volumeY);
 
   let queryParams = "x=" + volumeX + "&y=" + volumeY + "&z=" + volumeZ;
@@ -28,20 +24,6 @@ function solveWaterJugRiddle() {
   }).then(solutionSteps => {
     console.log(solutionSteps);
     let steps = solutionSteps.steps;
-    // for (let i = 0; i < steps.length; i++) {
-    //   setTimeout(function () {
-    //     let state = steps[i].state;
-    //     console.log(state);
-    //     document.getElementById("gauge-panel-status").innerHTML = state;
-    //     let x = steps[i].x;
-    //     console.log(x);
-    //     let y = steps[i].y;
-    //     console.log(y);
-    //     gaugeX.update(x);
-    //     gaugeY.update(y);
-    //   }, (i + 1) * 2500);
-    // }
-
 
     for (let i = 0; i < steps.length; i++) {
       let timeout = (i + 1) * 2500;
@@ -93,10 +75,10 @@ function getRiddleInputsAndDisplayProblemStatement() {
   let volumeZStr = document.getElementById("z").value;
 
   // display the problem statement based on the inputs
-  document.getElementById("gauge-panel-status").innerHTML =
+  document.getElementById(GaugePanel.getGaugePanelStatusElementID).innerHTML =
     "Measure " + volumeZStr + " gallons of water with " + volumeXStr + " gallon jug and " + volumeYStr + " gallon jug";
 
-  // TODO validate the inputs
+  // TODO validate inputs
   let volumeX = parseInt(volumeXStr).valueOf();
   let volumeY = parseInt(volumeYStr).valueOf();
   let volumeZ = parseInt(volumeZStr).valueOf();
