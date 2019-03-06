@@ -51,15 +51,7 @@ function getWaterJugRiddleSolution(x, y, z) {
   let queryParams = "x=" + x + "&y=" + y + "&z=" + z;
   let url = "http://localhost:3000/v1/riddles/water_jug/solution?" + queryParams;
   console.log(url);
-
-  // axios.get(uri)
-  //   .then(function (response) {
-  //     console.log(response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-
+  
   let requestConfig = {
     method: 'GET',
     mode: 'no-cors',
@@ -71,10 +63,13 @@ function getWaterJugRiddleSolution(x, y, z) {
     )
   };
 
-  fetch(url, requestConfig)
-    .catch(error => console.log('failed to fetch solution from riddle API', error))
-    .then(response => console.log(response.json()));
-
+  fetch(url, requestConfig).then(response => {
+    return response.json();
+  }).then(data => {
+    console.log(data);
+  }).catch(err => {
+    console.log('failed to fetch solution from riddle API', err)
+  });
 
   let riddleSteps = [
     {
