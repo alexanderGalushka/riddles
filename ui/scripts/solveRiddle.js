@@ -1,33 +1,82 @@
 function solveRiddle() {
 
+  enableControls(false);
+
+  solveWaterJugRiddle();
+
+  enableControls(true);
+
+}
+
+function solveWaterJugRiddle() {
+
   let volumeX, volumeY, volumeZ;
   [volumeX, volumeY, volumeZ] = getRiddleInputsAndDisplayProblemStatement();
 
-// initialize gauges with values from input X and Y
+  // initialize gauges with values from input X and Y
   scaleGaugesBasedOnVolume(volumeX, volumeY);
   let gaugeX = displayGauge("gaugeX", volumeX, 0);
   let gaugeY = displayGauge("gaugeY", volumeY, 0);
 
-  let solutionSteps = getWaterJugRiddleSolution(volumeX, volumeY, volumeZ);
+  let queryParams = "x=" + volumeX + "&y=" + volumeY + "&z=" + volumeZ;
+  let url = "http://localhost:3000/v1/riddles/water_jug/solution?" + queryParams;
+  console.log(url);
 
-  enableControls(false);
+  fetch(url).then(response => {
+    return response.json();
+  }).then(solutionSteps => {
+    console.log(solutionSteps);
 
-  for (let i = 0; i < solutionSteps.length; i++) {
-    setTimeout(function () {
-      let state = solutionSteps[i].state;
-      console.log(state);
-      document.getElementById("gauge-panel-status").innerHTML = state;
-      let x = solutionSteps[i].x;
-      console.log(x);
-      let y = solutionSteps[i].y;
-      console.log(y);
-      gaugeX.update(x);
-      gaugeY.update(y);
-    }, (i + 1) * 2500);
-  }
+    for (let i = 0; i < solutionSteps.length; i++) {
+      setTimeout(function () {
+        let state = solutionSteps[i].state;
+        console.log(state);
+        document.getElementById("gauge-panel-status").innerHTML = state;
+        let x = solutionSteps[i].x;
+        console.log(x);
+        let y = solutionSteps[i].y;
+        console.log(y);
+        gaugeX.update(x);
+        gaugeY.update(y);
+      }, (i + 1) * 2500);
+    }
 
-  enableControls(true);
+  }).catch(err => {
+    console.log('failed to fetch solution from riddle API', err)
+  });
 
+  // let riddleSteps = [
+  //   {
+  //     "state": "Fill up X",
+  //     "x": 5,
+  //     "y": 0,
+  //   },
+  //   {
+  //     "state": "Transfer from X to fill up Y",
+  //     "x": 2,
+  //     "y": 3,
+  //   },
+  //   {
+  //     "state": "Empty Y",
+  //     "x": 2,
+  //     "y": 0,
+  //   },
+  //   {
+  //     "state": "Transfer from X to Y",
+  //     "x": 0,
+  //     "y": 2,
+  //   },
+  //   {
+  //     "state": "Fill up X",
+  //     "x": 5,
+  //     "y": 2,
+  //   },
+  //   {
+  //     "state": "Transfer X to Y",
+  //     "x": 4,
+  //     "y": 3,
+  //   },
+  // ];
 }
 
 function getRiddleInputsAndDisplayProblemStatement() {
@@ -45,69 +94,6 @@ function getRiddleInputsAndDisplayProblemStatement() {
   let volumeZ = parseInt(volumeZStr).valueOf();
   return [volumeX, volumeY, volumeZ]
 }
-
-function getWaterJugRiddleSolution(x, y, z) {
-
-  let queryParams = "x=" + x + "&y=" + y + "&z=" + z;
-  let url = "http://localhost:3000/v1/riddles/water_jug/solution?" + queryParams;
-  console.log(url);
-  
-  let requestConfig = {
-    method: 'GET',
-    mode: 'no-cors',
-    headers: new Headers(
-      {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    )
-  };
-
-  fetch(url, requestConfig).then(response => {
-    return response.json();
-  }).then(data => {
-    console.log(data);
-  }).catch(err => {
-    console.log('failed to fetch solution from riddle API', err)
-  });
-
-  let riddleSteps = [
-    {
-      "state": "Fill up X",
-      "x": 5,
-      "y": 0,
-    },
-    {
-      "state": "Transfer from X to fill up Y",
-      "x": 2,
-      "y": 3,
-    },
-    {
-      "state": "Empty Y",
-      "x": 2,
-      "y": 0,
-    },
-    {
-      "state": "Transfer from X to Y",
-      "x": 0,
-      "y": 2,
-    },
-    {
-      "state": "Fill up X",
-      "x": 5,
-      "y": 2,
-    },
-    {
-      "state": "Transfer X to Y",
-      "x": 4,
-      "y": 3,
-    },
-  ];
-
-  return riddleSteps;
-}
-
-
 
 function enableControls(controlsFlag) {
   let solveButton = document.getElementById("solveButton");
