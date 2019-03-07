@@ -1,7 +1,7 @@
 {
-  "name": "ui",
+  "name": "client",
   "version": "1.0.0",
-  "description": "riddles ui",
+  "description": "riddles client",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
