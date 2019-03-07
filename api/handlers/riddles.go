@@ -20,29 +20,10 @@ func GetRiddleSolution(c *gin.Context) {
 
 	result, err := solveRiddle(riddleType, c)
 	if err != nil {
-		// TODO
-		c.JSON(http.StatusBadRequest, gin.H{consts.ErrorKey: err.Error()})
+		// TODO for some cases use specific granular error codes
+		c.JSON(http.StatusInternalServerError, gin.H{consts.ErrorKey: err.Error()})
 	}
 	c.JSON(http.StatusOK, result)
-
-	//if riddleTypeFlag, ok := supportedRiddleType[riddleType]; ok {
-	//	if !riddleTypeFlag {
-	//		c.JSON(http.StatusNotImplemented,
-	//			gin.H{consts.ErrorKey: fmt.Sprintf("handler for %s riddle type has not been implemented yet",
-	//				riddleType)})
-	//	} else {
-	//		result, err := solveRiddle(riddleType, c)
-	//		if err != nil {
-	//			c.JSON(http.StatusInternalServerError,
-	//				gin.H{consts.ErrorKey: err.Error()})
-	//		}
-	//		c.JSON(http.StatusOK, result)
-	//	}
-	//} else {
-	//	c.JSON(http.StatusUnprocessableEntity,
-	//		gin.H{consts.ErrorKey: fmt.Sprintf("%s is unknown riddle type", riddleType)})
-	//}
-
 }
 
 func solveRiddle(riddleType string, c *gin.Context) (map[string]interface{}, error) {
@@ -73,18 +54,18 @@ func solveWaterJugRiddle(inputX int, inputY int, inputZ int) (map[string]interfa
 	// simple cases
 	switch inputZ {
 	case 0:
-		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, "No need to solve, goal is set to 0"), nil
+		return singleStepWaterJugSolution(consts.XKey, 0, consts.YKey, 0, "No need to solve, goal is set to 0"), nil
 	case inputX:
-		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, "No need to solve, goal is set to 0"), nil
+		return singleStepWaterJugSolution(consts.XKey, inputX, consts.YKey, 0, fmt.Sprintf("Fill up X with %d gallons of water", inputX)), nil
 	case inputY:
-		return singleStepWaterJugSolution(consts.YKey, inputY, fmt.Sprintf("Fill up Y with %d gallons of water", inputY)), nil
+		return singleStepWaterJugSolution(consts.XKey, 0, consts.YKey, inputY, fmt.Sprintf("Fill up Y with %d gallons of water", inputY)), nil
 	case inputX+inputY:
-		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, fmt.Sprintf("Fill up X with %d and Y with %d gallons of water", inputX, inputY)), nil
+		return singleStepWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, fmt.Sprintf("Fill up X with %d and Y with %d gallons of water", inputX, inputY)), nil
 	}
 
 	// no solution, validate if there is a solution before trying to compute steps
 	if inputX+inputY < inputZ || !validateWithBezoutsIdentity(inputX, inputY, inputZ){
-		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, fmt.Sprintf(noSolutionErrorTemplate, inputZ, inputX, inputZ)), nil
+		return singleStepWaterJugSolution(consts.XKey, 0, consts.YKey, 0, fmt.Sprintf(noSolutionErrorTemplate, inputZ, inputX, inputZ)), nil
 	}
 
 	jugX := Jug{
@@ -105,8 +86,7 @@ func solveWaterJugRiddle(inputX int, inputY int, inputZ int) (map[string]interfa
 
 	// compute steps
 	steps := startWithBigJugToFindSolution(jc, inputZ)
-	result := map[string]interface{}{consts.StepsKey: steps}
-	return result, nil
+	return presentFinalResult(steps), nil
 }
 
 func startWithBigJugToFindSolution(jc JugContainer, z int) []Step {
@@ -147,13 +127,7 @@ func getGreatestCommonDivisor(x int, y int) int {
 	return x
 }
 
-func singleStepWaterJugSolution(idKey string, value int, state string) map[string]interface{} {
-	var steps []Step
-	steps = append(steps, Step{idKey: value, consts.StateKey: state})
-	return presentFinalResult(steps)
-}
-
-func singleStepTwoParamWaterJugSolution(idKey1 string, value1 int, idKey2 string, value2 int, state string) map[string]interface{} {
+func singleStepWaterJugSolution(idKey1 string, value1 int, idKey2 string, value2 int, state string) map[string]interface{} {
 	var steps []Step
 	steps = append(steps, Step{idKey1: value1, idKey2: value2, consts.StateKey: state})
 	return presentFinalResult(steps)
