@@ -48,11 +48,11 @@ func GetRiddleSolution(c *gin.Context) {
 func solveRiddle(riddleType string, c *gin.Context) (map[string]interface{}, error) {
 	switch riddleType {
 	case "water_jug":
-		x, err := u.GetQueryIntParam(c, "x")
+		x, err := u.GetQueryIntParam(c, consts.XKey)
 		if err != nil {
 			return nil, err
 		}
-		y, err := u.GetQueryIntParam(c, "y")
+		y, err := u.GetQueryIntParam(c, consts.YKey)
 		if err != nil {
 			return nil, err
 		}
@@ -70,19 +70,18 @@ func solveRiddle(riddleType string, c *gin.Context) (map[string]interface{}, err
 }
 
 func solveWaterJugRiddle(inputX int, inputY int, inputZ int) (map[string]interface{}, error) {
-	xKey := "x"
-	yKey := "y"
+
 	if inputZ == 0 {
-		return singleStepTwoParamWaterJugSolution(xKey, inputX, yKey, inputY, "No need to solve, goal is set to 0"), nil
+		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, "No need to solve, goal is set to 0"), nil
 	}
 	if inputZ == inputX {
-		return singleStepWaterJugSolution(xKey, inputX, fmt.Sprintf("Fill up X with %d gallons of water", inputX)), nil
+		return singleStepWaterJugSolution(consts.XKey, inputX, fmt.Sprintf("Fill up X with %d gallons of water", inputX)), nil
 	}
 	if inputZ == inputY {
-		return singleStepWaterJugSolution(yKey, inputY, fmt.Sprintf("Fill up Y with %d gallons of water", inputY)), nil
+		return singleStepWaterJugSolution(consts.YKey, inputY, fmt.Sprintf("Fill up Y with %d gallons of water", inputY)), nil
 	}
 	if inputZ == inputX+inputY {
-		return singleStepTwoParamWaterJugSolution(xKey, inputX, yKey, inputY, fmt.Sprintf("Fill up X with %d and Y with %d gallons of water", inputX, inputY)), nil
+		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, fmt.Sprintf("Fill up X with %d and Y with %d gallons of water", inputX, inputY)), nil
 	}
 	if inputX+inputY < inputZ {
 		return nil, fmt.Errorf(noSolutionErrorTemplate, inputZ, inputX, inputZ)
@@ -99,15 +98,14 @@ func solveWaterJugRiddle(inputX int, inputY int, inputZ int) (map[string]interfa
 		currentVolume: 0,
 	}
 	jc := JugContainer{
-		jugX: jugX,
-		jugY: jugY,
+		jugX:  jugX,
+		jugY:  jugY,
 		steps: []Step{},
 	}
 	steps := findAllSteps(jc, inputZ)
-	result := map[string]interface{}{"steps": steps}
+	result := map[string]interface{}{consts.StepsKey: steps}
 	return result, nil
 }
-
 
 func findAllSteps(jc JugContainer, z int) []Step {
 
@@ -127,7 +125,7 @@ func findAllSteps(jc JugContainer, z int) []Step {
 				jc.TransferYtoX()
 				jc.AddStep("Transfer from Y to X")
 				jc.jugY.Fill()
-				jc.AddStep( "Fill up from Y")
+				jc.AddStep("Fill up from Y")
 			}
 		}
 	}
@@ -146,7 +144,7 @@ func findAllSteps(jc JugContainer, z int) []Step {
 				jc.TransferXtoY()
 				jc.AddStep("Transfer from X to Y")
 				jc.jugX.Fill()
-				jc.AddStep( "Fill up from X")
+				jc.AddStep("Fill up from X")
 			}
 		}
 	}
@@ -182,5 +180,5 @@ func singleStepTwoParamWaterJugSolution(idKey1 string, value1 int, idKey2 string
 }
 
 func presentFinalResult(steps interface{}) map[string]interface{} {
-	return map[string]interface{}{"steps": steps}
+	return map[string]interface{}{consts.StepsKey: steps}
 }
