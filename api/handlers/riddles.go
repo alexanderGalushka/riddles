@@ -62,7 +62,7 @@ func solveRiddle(riddleType string, c *gin.Context) (map[string]interface{}, err
 		}
 		return solveWaterJugRiddle(x, y, z)
 	case "egg_equation":
-		return nil, fmt.Errorf("handler for %s riddle type has not been implemtned yet", riddleType)
+		return nil, fmt.Errorf("handler for %s riddle type has not been implemented", riddleType)
 	default:
 		return nil, fmt.Errorf("%s is unknown riddle type", riddleType)
 	}
@@ -70,85 +70,65 @@ func solveRiddle(riddleType string, c *gin.Context) (map[string]interface{}, err
 }
 
 func solveWaterJugRiddle(inputX int, inputY int, inputZ int) (map[string]interface{}, error) {
-
-	if inputZ == 0 {
+	// simple cases
+	switch inputZ {
+	case 0:
 		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, "No need to solve, goal is set to 0"), nil
-	}
-	if inputZ == inputX {
-		return singleStepWaterJugSolution(consts.XKey, inputX, fmt.Sprintf("Fill up X with %d gallons of water", inputX)), nil
-	}
-	if inputZ == inputY {
+	case inputX:
+		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, "No need to solve, goal is set to 0"), nil
+	case inputY:
 		return singleStepWaterJugSolution(consts.YKey, inputY, fmt.Sprintf("Fill up Y with %d gallons of water", inputY)), nil
-	}
-	if inputZ == inputX+inputY {
+	case inputX+inputY:
 		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, fmt.Sprintf("Fill up X with %d and Y with %d gallons of water", inputX, inputY)), nil
 	}
-	if inputX+inputY < inputZ {
-		return nil, fmt.Errorf(noSolutionErrorTemplate, inputZ, inputX, inputZ)
+
+	// no solution, validate if there is a solution before trying to compute steps
+	if inputX+inputY < inputZ || !validateWithBezoutsIdentity(inputX, inputY, inputZ){
+		return singleStepTwoParamWaterJugSolution(consts.XKey, inputX, consts.YKey, inputY, fmt.Sprintf(noSolutionErrorTemplate, inputZ, inputX, inputZ)), nil
 	}
-	if !validateWithBezoutsIdentity(inputX, inputY, inputZ) {
-		return nil, fmt.Errorf(noSolutionErrorTemplate, inputZ, inputX, inputZ)
-	}
+
 	jugX := Jug{
 		totalVolume:   inputX,
 		currentVolume: 0,
+		id: "X",
 	}
 	jugY := Jug{
 		totalVolume:   inputY,
 		currentVolume: 0,
+		id: "Y",
 	}
 	jc := JugContainer{
 		jugX:  jugX,
 		jugY:  jugY,
 		steps: []Step{},
 	}
-	steps := findAllSteps(jc, inputZ)
+
+	// compute steps
+	steps := startWithBigJugToFindSolution(jc, inputZ)
 	result := map[string]interface{}{consts.StepsKey: steps}
 	return result, nil
 }
 
-func findAllSteps(jc JugContainer, z int) []Step {
-
-	// very first step: keep the smaller jug empty and fill up the larger one
-	if jc.jugY.totalVolume > jc.jugX.totalVolume {
-		jc.jugY.Fill()
-		jc.AddStep("Fill up Y")
-		for {
-			jc.TransferYtoX()
-			jc.AddStep("Transfer from Y to fill up X")
-			if jc.jugY.currentVolume == z || jc.jugX.currentVolume == z || jc.jugY.currentVolume+jc.jugX.currentVolume == z {
-				return jc.steps
-			}
-			jc.jugX.Empty()
-			jc.AddStep("Empty X")
-			if jc.jugY.currentVolume < jc.jugX.totalVolume {
-				jc.TransferYtoX()
-				jc.AddStep("Transfer from Y to X")
-				jc.jugY.Fill()
-				jc.AddStep("Fill up from Y")
-			}
+func startWithBigJugToFindSolution(jc JugContainer, z int) []Step {
+	bigJug := jc.BigJug()
+	smallJug := jc.SmallJug()
+	bigJug.Fill()
+	jc.AddStep(fmt.Sprintf("Fill up %s", bigJug.id))
+	for {
+		jc.TransferFromBigtoSmall()
+		jc.AddStep(fmt.Sprintf("Transfer from %s to fill up %s", bigJug.id, smallJug.id))
+		if jc.IsSolved(z) {
+			return jc.steps
+		}
+		smallJug.Empty()
+		jc.AddStep(fmt.Sprintf("Empty %s", smallJug.id))
+		if bigJug.currentVolume < smallJug.totalVolume {
+			jc.TransferFromBigtoSmall()
+			jc.AddStep(fmt.Sprintf("Transfer from %s to %s", bigJug.id, smallJug.id))
+			bigJug.Fill()
+			jc.AddStep(fmt.Sprintf("Fill up from %s", bigJug.id))
 		}
 	}
-	if jc.jugX.totalVolume > jc.jugY.totalVolume {
-		jc.jugX.Fill()
-		jc.AddStep("Fill up X")
-		for {
-			jc.TransferXtoY()
-			jc.AddStep("Transfer from X to fill up Y")
-			if jc.jugX.currentVolume == z || jc.jugY.currentVolume == z || jc.jugX.currentVolume+jc.jugY.currentVolume == z {
-				return jc.steps
-			}
-			jc.jugY.Empty()
-			jc.AddStep("Empty Y")
-			if jc.jugX.currentVolume < jc.jugY.totalVolume {
-				jc.TransferXtoY()
-				jc.AddStep("Transfer from X to Y")
-				jc.jugX.Fill()
-				jc.AddStep("Fill up from X")
-			}
-		}
-	}
-	return jc.steps
 }
 
 // see https://en.wikipedia.org/wiki/Bézout%27s_identity

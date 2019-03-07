@@ -10,12 +10,15 @@ import (
 
 func TestEmpty(t *testing.T) {
 	assert := assert.New(t)
+
 	totalVolume := 5
 	currentVolume := 3
+
 	jugX := Jug{
 		totalVolume:   totalVolume,
 		currentVolume: currentVolume,
 	}
+
 	t.Run("unit=EmptyIndependentJug", func(t *testing.T) {
 
 		jugX.Empty()
@@ -34,12 +37,15 @@ func TestEmpty(t *testing.T) {
 
 func TestFill(t *testing.T) {
 	assert := assert.New(t)
+
 	totalVolume := 5
 	currentVolume := 0
+
 	jugX := Jug{
 		totalVolume:   totalVolume,
 		currentVolume: currentVolume,
 	}
+
 	t.Run("unit=FillIndependentJug", func(t *testing.T) {
 
 		jugX.Fill()
@@ -54,52 +60,70 @@ func TestFill(t *testing.T) {
 	})
 }
 
-func TestTransferXtoY(t *testing.T) {
+func TestTransferFromBigtoSmall(t *testing.T) {
 	assert := assert.New(t)
 	totalVolumeX := 5
 	currentVolumeX := 2
+
+	totalVolumeY := 3
+	currentVolumeY := 1
+
 	jugX := Jug{
 		totalVolume:   totalVolumeX,
 		currentVolume: currentVolumeX,
 	}
-	totalVolumeY := 3
-	currentVolumeY := 1
+
 	jugY := Jug{
 		totalVolume:   totalVolumeY,
 		currentVolume: currentVolumeY,
 	}
+
 	jc := JugContainer{
 		jugX: jugX,
 		jugY: jugY,
 	}
-	t.Run("unit=TransferXtoYWithinContainer", func(t *testing.T) {
-		jc.TransferXtoY()
+
+	t.Run("unit=TransferFromBigToSmallWithinContainer", func(t *testing.T) {
+		jc.TransferFromBigtoSmall()
 		assert.Equal(currentVolumeX+currentVolumeY, jc.jugY.currentVolume)
 		assert.Equal(0, jc.jugX.currentVolume)
 	})
 }
 
-func TestTransferYtoX(t *testing.T) {
+func TestIsSolved(t *testing.T) {
 	assert := assert.New(t)
+
 	totalVolumeX := 5
 	currentVolumeX := 2
+
+	totalVolumeY := 3
+	currentVolumeY := 1
+
 	jugX := Jug{
 		totalVolume:   totalVolumeX,
 		currentVolume: currentVolumeX,
 	}
-	totalVolumeY := 3
-	currentVolumeY := 1
+
 	jugY := Jug{
 		totalVolume:   totalVolumeY,
 		currentVolume: currentVolumeY,
 	}
+
 	jc := JugContainer{
 		jugX: jugX,
 		jugY: jugY,
 	}
-	t.Run("unit=TransferXtoYWithinContainer", func(t *testing.T) {
-		jc.TransferYtoX()
-		assert.Equal(currentVolumeX+currentVolumeY, jc.jugX.currentVolume)
-		assert.Equal(0, jc.jugY.currentVolume)
+
+	t.Run("unit=IsSolvedFalse", func(t *testing.T) {
+		assert.False(jc.IsSolved(4))
+	})
+	t.Run("unit=IsSolvedTrueY", func(t *testing.T) {
+		assert.True(jc.IsSolved(currentVolumeY))
+	})
+	t.Run("unit=IsSolvedTrueX", func(t *testing.T) {
+		assert.True(jc.IsSolved(currentVolumeX))
+	})
+	t.Run("unit=IsSolvedTrueBoth", func(t *testing.T) {
+		assert.True(jc.IsSolved(currentVolumeX+currentVolumeY))
 	})
 }
