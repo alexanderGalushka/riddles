@@ -83,9 +83,9 @@ function createGauge(elementID, maxGaugeValue, currentGaugeMeasurement) {
   let config = liquidFillGaugeDefaultSettings();
   config.maxValue = maxGaugeValue;
   config.circleThickness = 0.1;
-  config.circleColor = "#676468";
+  config.circleColor = "#FFFFFF";
   config.textColor = "#A9A9A9";
-  config.waveColor = "#3F78AA";
+  config.waveColor = "#7FA9D1";
   config.textVertPosition = 0.8;
   config.waveAnimateTime = 1000;
   config.waveAnimate = true;

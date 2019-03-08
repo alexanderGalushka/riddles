@@ -7,98 +7,59 @@
     <script src="../scripts/liquidFillGauge.js" type="text/javascript"></script>
     <script src="../scripts/waterGauges.js" type="text/javascript"></script>
     <script src="../scripts/solveRiddle.js" type="text/javascript"></script>
-    <style>
 
-        label {
-            font-family: Helvetica;
-            font-weight: bold;
-        }
-
-        input {
-            font-family: Helvetica;
-            font-weight: bold;
-            font-size: 20px;
-            width: 100px;
-            height: 35px;
-            background-color: #676468;
-        }
-
-        button:hover {
-            background-color: #676468;
-        }
-
-        button:focus {
-            background-color: #3F78AA;
-        }
-
-        .goal-input {
-            background-color: lightgrey;
-            width: 1000px;
-            border: 2px solid #676468;
-            padding: 25px;
-            margin: 50px;
-        }
-
-        .main-view {
-            background:url(http://subtlepatterns.subtlepatterns.netdna-cdn.com/patterns/wild_oliva.png);
-        }
-
-        .gauge-panel {
-            background-color: #d8d8d8;
-            width: 1000px;
-            border: 2px solid #676468;
-            padding: 25px;
-            margin: 50px;
-        }
-
-        #gauge-panel-status {
-            background-color: lightgrey;
-            color: black;
-            padding: 25px;
-            text-align: center;
-            font-family: Helvetica;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .liquidFillGaugeText {
-            font-family: Helvetica;
-            font-weight: bold;
-        }
-
-        .solve {
-            width: 100px;
-            height: 35px;
-            margin: 50px;
-            font-family: Helvetica;
-            font-weight: bold;
-            font-size: 20px;
-            background-color: lightgrey;
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles/buttons.css" type="text/css">
+    <link rel="stylesheet" href="styles/columns.css" type="text/css">
+    <link rel="stylesheet" href="styles/inputs.css" type="text/css">
+    <link rel="stylesheet" href="styles/loader.css" type="text/css">
 </head>
 <body>
 
-<div class="main-view" align="center">
-
-    <div class="goal-input" align="left">
-        <label for="z">Goal Z:</label>
-        <input type="text" class="input-field" id="z">
-    </div>
-
-    <div class="gauge-panel">
-        <h1 id="gauge-panel-status"></h1>
-        <label>Jug X:<input type="text" class="input-field" id="x"></label>
-        <svg width="30%" height="250" id="gaugeX"></svg>
-        <label>Jug Y:<input type="text" class="input-field" id="y"></label>
-        <svg width="30%" height="250" id="gaugeY"></svg>
-    </div>
-
-    <button id="solveButton" class="solve" onclick="solveRiddle();">solve </button>
-
+<div class="split left">
+    <form class="inputs">
+        <ul>
+            <li>
+                <label for="z">Goal Z</label>
+                <input id="z" type="text" name="z" maxlength="100">
+                <span>Enter amount of water Z you would like to measure</span>
+            </li>
+            <li>
+                <label for="x">Jug X</label>
+                <input id="x" type="text" name="x" maxlength="100">
+                <span>Enter capacity of jug X</span>
+            </li>
+            <li>
+                <label for="y">Jug Y</label>
+                <input id="y" type="text" name="y" maxlength="100">
+                <span>Enter capacity of jug Y</span>
+            </li>
+            <li>
+                <button id="solveButton" class="large button" onclick="solveRiddle();">solve </button>
+                <button id="next" class="large button" onclick="reload();">next </button>
+            </li>
+        </ul>
+    </form>
 </div>
 
+<div class="split right">
+
+        <div id="loader" class="loader">
+            <div class="text">Click SOLVE button</div>
+            <div class="dots">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+        <h1 id="gauge-panel-status"></h1>
+        <label id="xLabel"></label>
+        <svg width="30%" height="250" id="gaugeX"></svg>
+        <label id="yLabel"></label>
+        <svg width="30%" height="250" id="gaugeY"></svg>
+
+</div>
 
 </body>
 </html>

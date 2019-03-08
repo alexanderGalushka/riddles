@@ -1,11 +1,9 @@
 function solveRiddle() {
-
   enableControls(false);
-
+  showJugLabels();
+  disableLoader();
   solveWaterJugRiddle();
-
   enableControls(true);
-
 }
 
 function solveWaterJugRiddle() {
@@ -62,4 +60,17 @@ function enableControls(controlsFlag) {
   inputY.disabled = controlsFlag;
   let inputZ = document.getElementById("z");
   inputZ.disabled = controlsFlag;
+}
+
+function disableLoader() {
+  document.getElementById("loader").outerHTML = "";
+}
+
+function showJugLabels() {
+  document.getElementById("xLabel").innerHTML = "Jug X gauge";
+  document.getElementById("yLabel").innerHTML = "Jug Y gauge";
+}
+
+function reload() {
+  location.reload();
 }
