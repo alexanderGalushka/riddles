@@ -2,10 +2,10 @@
 
 
 [[projects]]
-  name = "github.com/gin-contrib/cors"
-  packages = ["."]
-  revision = "cf4846e6a636a76237a28d9286f163c132e841bc"
-  version = "v1.2"
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
 
 [[projects]]
   branch = "master"
@@ -50,6 +50,18 @@
   version = "1.0.1"
 
 [[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/ugorji/go"
   packages = ["codec"]
   revision = "8fd0f8d918c8f0b52d0af210a812ba882cc31a1e"
@@ -76,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "2fbeb9a46da878390d07b950e44357072cba1b0969f46d75b099835c9a9bc775"
+  inputs-digest = "a26fe2ec5dcade0cfe44a2d19f5fae623b70367afcd1b74495d611eefd82a98d"
   solver-name = "gps-cdcl"
   solver-version = 1

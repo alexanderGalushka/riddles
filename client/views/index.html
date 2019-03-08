@@ -6,7 +6,6 @@
     <script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
     <script src="../scripts/liquidFillGauge.js" type="text/javascript"></script>
     <script src="../scripts/waterGauges.js" type="text/javascript"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js" type="text/javascript"></script>
     <script src="../scripts/solveRiddle.js" type="text/javascript"></script>
     <style>
 
@@ -40,8 +39,12 @@
             margin: 50px;
         }
 
+        .main-view {
+            background:url(http://subtlepatterns.subtlepatterns.netdna-cdn.com/patterns/wild_oliva.png);
+        }
+
         .gauge-panel {
-            background-color: lightgrey;
+            background-color: #d8d8d8;
             width: 1000px;
             border: 2px solid #676468;
             padding: 25px;
@@ -77,30 +80,25 @@
 </head>
 <body>
 
-<div class="goal-input" align="left">
-    <label for="z">Goal Z: </label>
-    <input type="text" class="input-field" id="z">
+<div class="main-view" align="center">
+
+    <div class="goal-input" align="left">
+        <label for="z">Goal Z:</label>
+        <input type="text" class="input-field" id="z">
+    </div>
+
+    <div class="gauge-panel">
+        <h1 id="gauge-panel-status"></h1>
+        <label>Jug X:<input type="text" class="input-field" id="x"></label>
+        <svg width="30%" height="250" id="gaugeX"></svg>
+        <label>Jug Y:<input type="text" class="input-field" id="y"></label>
+        <svg width="30%" height="250" id="gaugeY"></svg>
+    </div>
+
+    <button id="solveButton" class="solve" onclick="solveRiddle();">solve </button>
+
 </div>
 
-<div class="gauge-panel">
-    <h1 id="gauge-panel-status"></h1>
-
-    <label>
-        Jug X:
-        <input type="text" class="input-field" id="x">
-    </label>
-
-    <svg width="30%" height="250" id="gaugeX"></svg>
-
-    <label>
-        Jug Y:
-        <input type="text" class="input-field" id="y">
-    </label>
-
-    <svg width="30%" height="250" id="gaugeY"></svg>
-</div>
-
-<button id="solveButton" class="solve" onclick="solveRiddle();">solve</button>
 
 </body>
 </html>
