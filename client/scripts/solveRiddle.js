@@ -40,15 +40,31 @@ function getRiddleInputsAndDisplayProblemStatement() {
   let volumeYStr = document.getElementById("y").value;
   let volumeZStr = document.getElementById("z").value;
 
+  if (!isPositiveInteger(volumeXStr)){
+    window.alert("Please enter the positive integer for X");
+    reload();
+  }
+  if (!isPositiveInteger(volumeYStr))  {
+    window.alert("Please enter the positive integer for Y");
+    reload();
+  }
+  if (!isPositiveInteger(volumeZStr)) {
+    window.alert("Please enter the positive integer for Z");
+    reload();
+  }
+
   // display the problem statement based on the inputs
   document.getElementById(GaugePanel.getGaugePanelStatusElementID).innerHTML =
     "Measure " + volumeZStr + " gallons of water with " + volumeXStr + " gallon jug and " + volumeYStr + " gallon jug";
 
-  // TODO validate inputs
   let volumeX = parseInt(volumeXStr).valueOf();
   let volumeY = parseInt(volumeYStr).valueOf();
   let volumeZ = parseInt(volumeZStr).valueOf();
   return [volumeX, volumeY, volumeZ]
+}
+
+function isPositiveInteger(str) {
+  return /^\+?(0|[1-9]\d*)$/.test(str);
 }
 
 function enableControls(controlsFlag) {
